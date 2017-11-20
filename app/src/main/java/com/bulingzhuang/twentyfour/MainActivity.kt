@@ -3,9 +3,15 @@ package com.bulingzhuang.twentyfour
 import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.os.Bundle
+import android.support.transition.Fade
+import android.support.transition.TransitionManager
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.widget.Button
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -30,7 +36,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             Pair(R.mipmap.card_k_2, R.mipmap.card_k_2_r),
             Pair(R.mipmap.card_k_3, R.mipmap.card_k_3_r))
 
-    private val mCardList = ArrayList<CardData>()
+    private val mCardList = ArrayList<CardData>()//卡牌List
 
     companion object {
         val delayDuration = 233L
@@ -60,10 +66,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             anim.addUpdateListener {
                 val realFl = it.animatedValue as Float
                 val fl = if (realFl >= 180) {
-                    Pair(true,realFl - 180)
+                    Pair(true, realFl - 180)
 
                 } else {
-                    Pair(false,realFl)
+                    Pair(false, realFl)
                 }
                 if (Math.abs(fl.second) >= 90) {
                     if (position < mCardList.size) {
@@ -72,28 +78,28 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                             0 -> {
                                 if (fl.first) {
                                     iv_card_0.setImageResource(itemCardData.resourceId)
-                                }else{
+                                } else {
                                     iv_card_0.setImageResource(itemCardData.resourceIdr)
                                 }
                             }
                             1 -> {
                                 if (fl.first) {
                                     iv_card_1.setImageResource(itemCardData.resourceId)
-                                }else{
+                                } else {
                                     iv_card_1.setImageResource(itemCardData.resourceIdr)
                                 }
                             }
                             2 -> {
                                 if (fl.first) {
                                     iv_card_2.setImageResource(itemCardData.resourceId)
-                                }else{
+                                } else {
                                     iv_card_2.setImageResource(itemCardData.resourceIdr)
                                 }
                             }
                             3 -> {
                                 if (fl.first) {
                                     iv_card_3.setImageResource(itemCardData.resourceId)
-                                }else{
+                                } else {
                                     iv_card_3.setImageResource(itemCardData.resourceIdr)
                                 }
                             }
@@ -113,13 +119,47 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun randomCard() {
         mCardList.clear()
-        for (position in 0..4) {
+        for (position in 0..3) {
             val realNum = mRandom.nextInt(13)
-
             mCardList.add(getCard(realNum))
         }
         initAnimSet(iv_card_0, iv_card_1, iv_card_2, iv_card_3).start()
-//        mAnimSet.start()
+    }
+
+    private fun setText(str: String) {
+        when (str) {
+            resources.getString(R.string.keyboard_c) -> {
+                val resultStr = tv_calculator_result.text
+                if (resultStr.isEmpty()) {
+                    val currentStr = tv_calculator.text
+                    if (currentStr.isNotEmpty()) {
+                        tv_calculator.text = currentStr.substring(0, currentStr.length - 1)
+                    }
+                } else {
+                    tv_calculator_result.text = ""
+                }
+            }
+            resources.getString(R.string.keyboard_ac) -> {
+                tv_calculator.text = ""
+                tv_calculator_result.text = ""
+            }
+            resources.getString(R.string.keyboard_calculate) -> {//计算
+                //TODO 根据前面是否可以组成公式计算值
+            }
+            else -> {
+                val oldStr = tv_calculator.text.toString()
+                val currentStr = if (oldStr.isNotEmpty()) {
+                    if (oldStr.substring(oldStr.length - 1, oldStr.length) == str) {
+                        oldStr
+                    } else {
+                        oldStr + str
+                    }
+                } else {
+                    oldStr + str
+                }
+                tv_calculator.text = currentStr
+            }
+        }
     }
 
     /**
@@ -164,75 +204,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         when (v?.id) {
             R.id.btn_start -> {//开始
                 randomCard()
+                TransitionManager.beginDelayedTransition(container, Fade())
+                ll_keyboard.visibility = View.VISIBLE
+                btn_start.visibility = View.GONE
             }
-            R.id.btn_1 -> {
-
-            }
-            R.id.btn_2 -> {
-
-            }
-            R.id.btn_3 -> {
-
-            }
-            R.id.btn_4 -> {
-
-            }
-            R.id.btn_5 -> {
-
-            }
-            R.id.btn_6 -> {
-
-            }
-            R.id.btn_7 -> {
-
-            }
-            R.id.btn_8 -> {
-
-            }
-            R.id.btn_9 -> {
-
-            }
-            R.id.btn_10 -> {
-
-            }
-            R.id.btn_11 -> {
-
-            }
-            R.id.btn_12 -> {
-
-            }
-            R.id.btn_13 -> {
-
-            }
-            R.id.btn_bracket_start -> {//括号-开始
-
-            }
-            R.id.btn_bracket_end -> {//括号-结束
-
-            }
-            R.id.btn_add -> {//加
-
-            }
-            R.id.btn_subtraction -> {//减
-
-            }
-            R.id.btn_multiplication -> {//乘
-
-            }
-            R.id.btn_division -> {//除
-
-            }
-            R.id.btn_calculate -> {//等于
-
-            }
-            R.id.btn_c -> {//清除
-
-            }
-            R.id.btn_ac -> {//清空
-
+            R.id.btn_1, R.id.btn_2, R.id.btn_3, R.id.btn_4, R.id.btn_5, R.id.btn_6, R.id.btn_7, R.id.btn_8, R.id.btn_9, R.id.btn_10,
+            R.id.btn_11, R.id.btn_12, R.id.btn_13, R.id.btn_bracket_start, R.id.btn_bracket_end, R.id.btn_add, R.id.btn_subtraction,
+            R.id.btn_multiplication, R.id.btn_division, R.id.btn_c, R.id.btn_ac, R.id.btn_calculate
+            -> {//keyboard按键对应操作
+                setText((v as Button).text.toString())
             }
             R.id.btn_copy -> {//复制
-
+                val calculatorStr = tv_calculator.text.toString() + tv_calculator_result.text.toString()
+                if (calculatorStr.isNotEmpty()) {
+                    val cm = getSystemService(android.content.Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    cm.primaryClip = ClipData.newPlainText("Label", calculatorStr)
+                    Toast.makeText(this, "已保存到剪贴板", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

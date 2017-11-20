@@ -3,4 +3,7 @@
     <string name="app_name">TwentyFour</string>
     <string name="start">から</string>
     <string name="copy">コピー</string>
+    <string name="keyboard_c">C</string>
+    <string name="keyboard_ac">AC</string>
+    <string name="keyboard_calculate">=</string>
 </resources>

@@ -134,17 +134,37 @@
         </RelativeLayout>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_calculator"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textColor="@color/colorPrimary"
-        android:textSize="24sp"
-        android:textStyle="bold"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@id/ll_keyboard"
-        app:layout_constraintTop_toBottomOf="@id/ll_card"
-        tools:text="(12-6)*(3-1)=24"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_card">
+
+        <TextView
+            android:id="@+id/tv_calculator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/colorPrimary"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="(12-6)*(3-1)"/>
+
+        <TextView
+            android:id="@+id/tv_calculator_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/colorPrimary"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            tools:text="=24"/>
+    </LinearLayout>
 
     <Button
         android:id="@+id/btn_start"
@@ -154,6 +174,7 @@
         android:backgroundTint="@color/colorPrimary"
         android:text="@string/start"
         android:textColor="@android:color/white"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
@@ -162,9 +183,9 @@
         android:id="@+id/ll_keyboard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="6dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="28dp"
+        android:layout_marginStart="28dp"
         android:orientation="vertical"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -182,7 +203,7 @@
             <Button
                 android:id="@+id/btn_ac"
                 style="@style/btn_keyboard_15"
-                android:text="AC"/>
+                android:text="@string/keyboard_ac"/>
 
             <Button
                 android:id="@+id/btn_c"
@@ -192,7 +213,7 @@
                 android:layout_marginStart="3dp"
                 android:layout_weight="1.5"
                 android:backgroundTint="@color/colorPrimary"
-                android:text="C"
+                android:text="@string/keyboard_c"
                 android:textColor="@android:color/white"
                 android:textSize="15sp"/>
         </LinearLayout>
@@ -324,7 +345,7 @@
             <Button
                 android:id="@+id/btn_calculate"
                 style="@style/btn_keyboard_15"
-                android:text="="/>
+                android:text="@string/keyboard_calculate"/>
         </LinearLayout>
 
     </LinearLayout>
